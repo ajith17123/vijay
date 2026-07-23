@@ -115,9 +115,7 @@
   height: 100%;
   z-index: 1;
   /* Custom color fill requested by the user */
-  background: #7d7c7c;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #C4771A;
   /* Silver chiseled highlights */
   text-shadow: 
     -1px -1px 0px rgba(255, 255, 255, 0.6), /* Subtle top-left bevel */
@@ -156,9 +154,7 @@
   height: 100%;
   z-index: 1;
   /* Solid color fill requested by the user */
-  background: #7d7c7c;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #C4771A;
   /* Silver bevel offsets + deep shadow */
   text-shadow: 
     -2px -2px 0px rgba(255, 255, 255, 0.75), /* Bright white top-left bevel */
