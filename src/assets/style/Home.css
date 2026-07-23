@@ -1,0 +1,219 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Montserrat:wght@800;900&display=swap");
+
+:root {
+  --bg: #0b090a;
+  --ink: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hero-section {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg);
+  /* Dark cinema vignette + very subtle cyan/red ambient backlighting matching the reference photo */
+  background-image: 
+    radial-gradient(circle at 65% 55%, rgba(0, 180, 216, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 35% 45%, rgba(239, 35, 60, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%),
+    var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+}
+
+/* Container that holds spawned trail images. Sits above the background,
+   below nothing important, and never intercepts pointer events. */
+.trail-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.trail-image {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  /* Thin golden border to match the cinematic theme */
+  border: 2px solid rgba(255, 215, 0, 0.8);
+  opacity: 0;
+  transform: scale(0.3) rotate(var(--rotate, 0deg)) translate(0, 0);
+  filter: saturate(1.1) contrast(1.1) brightness(0.95);
+  /* Golden glowing drop shadow */
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.6), 
+    0 0 15px rgba(255, 215, 0, 0.25);
+  will-change: transform, opacity;
+  animation: trail-life 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Start small/faded -> scale up + settle -> drift + fade out -> gone */
+@keyframes trail-life {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(var(--rotate, 0deg)) translate(0, 0);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1.05) rotate(var(--rotate, 0deg)) translate(0, 0);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1) rotate(var(--rotate, 0deg)) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.85) rotate(var(--rotate, 0deg))
+      translate(var(--drift-x, 0px), var(--drift-y, 0px));
+  }
+}
+
+.title-card-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  padding: 0 24px;
+}
+
+.thalapathy-prefix {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #0b0c0d;
+  margin-bottom: 5px;
+  position: relative;
+  display: inline-block;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.25);
+  animation: prefix-letter-spacing 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: letter-spacing, opacity;
+}
+
+.thalapathy-prefix::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* Custom color fill requested by the user */
+  background: #7d7c7c;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Silver chiseled highlights */
+  text-shadow: 
+    -1px -1px 0px rgba(255, 255, 255, 0.6), /* Subtle top-left bevel */
+    1px 1px 0px #3c3b37,                  /* Bottom-right shadow bevel */
+    0px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.thalapathy-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(3.5rem, 15vw, 9.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+  margin: 0;
+  line-height: 0.85;
+  color: #08090a;
+  position: relative;
+  display: inline-block;
+  -webkit-text-stroke: 2.5px rgba(255, 255, 255, 0.25);
+  filter: 
+    drop-shadow(-15px 0px 30px rgba(0, 180, 216, 0.2)) /* Ambient blue glow left */
+    drop-shadow(15px 0px 30px rgba(239, 35, 60, 0.2));  /* Ambient red glow right */
+  animation: 
+    title-breath 4s ease-in-out infinite alternate,
+    title-letter-spacing-massive 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: letter-spacing, transform;
+}
+
+.thalapathy-title::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* Solid color fill requested by the user */
+  background: #7d7c7c;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Silver bevel offsets + deep shadow */
+  text-shadow: 
+    -2px -2px 0px rgba(255, 255, 255, 0.75), /* Bright white top-left bevel */
+    2px 2px 0px #323538,                     /* Dark metal bottom-right bevel */
+    0px 6px 12px rgba(0, 0, 0, 0.95),         /* Drop shadow */
+    0px 15px 30px rgba(0, 0, 0, 0.7);
+}
+
+@keyframes prefix-letter-spacing {
+  0% {
+    letter-spacing: 0.15em;
+    opacity: 0;
+  }
+  100% {
+    letter-spacing: 0.55em;
+    opacity: 1;
+  }
+}
+
+@keyframes title-letter-spacing-massive {
+  0% {
+    letter-spacing: -0.05em;
+    opacity: 0;
+    filter: blur(8px) 
+            drop-shadow(-15px 0px 30px rgba(0, 180, 216, 0))
+            drop-shadow(15px 0px 30px rgba(239, 35, 60, 0));
+  }
+  100% {
+    letter-spacing: 0.08em;
+    opacity: 1;
+    filter: blur(0px) 
+            drop-shadow(-15px 0px 30px rgba(0, 180, 216, 0.2))
+            drop-shadow(15px 0px 30px rgba(239, 35, 60, 0.2));
+  }
+}
+
+@keyframes title-breath {
+  0% {
+    transform: scale(0.96) rotate(-0.5deg);
+  }
+  100% {
+    transform: scale(1.02) rotate(0.5deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .trail-image {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trail-image {
+    animation-duration: 400ms;
+  }
+}
+
